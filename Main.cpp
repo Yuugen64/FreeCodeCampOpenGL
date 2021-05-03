@@ -21,7 +21,14 @@ const char* fragmentShaderSource = "#version 330 core\n"
 int main()
 {
 	//Initialize glfw so we can use its functions.
-	glfwInit();
+	if (!glfwInit())
+	{
+		std::cout << "Error initializing GLFW." << std::endl;
+	}
+	else
+	{
+		std::cout << "Initialized GLFW." << std::endl;
+	}
 
 	//glfw doesnt know which version of glfw we are using, so we need to tell it via hints.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -30,14 +37,7 @@ int main()
 	//an openGL profile is a set of functions. 2 types, 'core' (modern funcs), and 'compatability' (modern + older funcs).
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	//Coordinates for a vertex shader
-	//We use openGL-float datatype because normal floats may differ in size causing errors.
-	GLfloat vertices[] =
-	{
-		-0.5f, -0.5f * float(sqrt(3)) / 3.0f,
-		-0.5f, -0.5f * float(sqrt(3)) / 3.0f,
-		0.0f, 0.5 * float(sqrt(3)) * 2 / 3, 0.0f
-	};
+	
 
 
 
@@ -45,6 +45,34 @@ int main()
 
 	//glfw window type
 	GLFWwindow* window = glfwCreateWindow(800, 800, "FreeCodeCampOpenGL", NULL, NULL);
+
+	//Error checking in case window fails to create.
+	if (window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	//Tell the openGL context that we want to use the window.
+	glfwMakeContextCurrent(window);
+
+	//Using GLAD and loading needed configs for OpenGL
+	gladLoadGL();
+
+	/*
+	//Render a color to our window.
+	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glfwSwapBuffers(window);
+	*/
+
+	//Define what part of the viewport OpenGL should render in.
+	glViewport(0, 0, 800, 800);
+
+
+	
+
+
 
 	//Attempting to create our vertex shader by referencing an openGL vertex shader
 	//GLuint -> openGL unsigned integer, i.e. a positive integer using all 8 bits for values.
@@ -65,7 +93,7 @@ int main()
 
 	glAttachShader(shaderProgram, myVertexShader);
 	glAttachShader(shaderProgram, myFragmentShader);
-	glLineWidth(shaderProgram);
+	glLinkProgram(shaderProgram);
 
 	//We can delete our previous shaders because they're already in our shaderProgram.
 	glDeleteShader(myVertexShader);
@@ -73,38 +101,81 @@ int main()
 
 
 
-	//Error checking in case window fails to create.
-	if (window == NULL) 
+	//Coordinates for a vertex shader
+	//We use openGL-float datatype because normal floats may differ in size causing errors.
+	GLfloat vertices[] =
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	//Tell the openGL context that we want to use the window.
-	glfwMakeContextCurrent(window);
+		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
+		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
+		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f
+	};
+	
 
-	//Using GLAD and loading needed configs for OpenGL
-	gladLoadGL();
 
-	//Render a color to our window.
-	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glfwSwapBuffers(window);
 
-	//Define what part of the viewport OpenGL should render in.
-	glViewport(0, 0, 800, 800);
+
+	//Vertex buffer objects are large sets of data passed between the CPU and GPU (since that communication is quite expensive and slow).
+	//Vertex array objects tell openGL how to use vertex buffer objects.
+
+	//Initialize a vertex array object, and a vertex buffer object.
+	GLuint VAO, VBO;
+
+	//We only have one of each currently currently:
+
+	//*****The VAO MUST be generated BEFORE the VBO.
+	glGenVertexArrays(1, &VAO);
+
+	//Generate the Vertex Buffer Object
+	glGenBuffers(1, &VBO);
+
+	//Make the VAO the current Vertex Array Object by binding it.
+	glBindVertexArray(VAO);
+
+
+
+	//bind our vertex buffer object
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//^All of this results in a nicely packed object with our vertex data.
+
+	//Tells openGL how to interpret our vertices (how many, what type, how big are they, and some other things).
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	//Bind our vertex array to 0 so it can't be modified by a function call.
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+
+	
+
+
+
+	
 
 	while (!glfwWindowShouldClose(window))
 	{
+		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glUseProgram(shaderProgram);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		//Make sure to swap buffers so the vertices are actually drawn to the frame.
+		glfwSwapBuffers(window);
+
+
 		glfwPollEvents();
 	}
 
-
-
+	//Terminate out VAO(s), VBO(s), and shaderProgram before the program ends.
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteProgram(shaderProgram);
 
 	//Terminate the glfw window before the program ends.
 	glfwDestroyWindow(window);
-	//End glfw
+	//Terminate GLFW before the program ends.
 	glfwTerminate();
 	return 0;
 }
