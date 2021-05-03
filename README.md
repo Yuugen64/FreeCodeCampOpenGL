@@ -72,3 +72,13 @@ glClear(GL_COLOR_BUFFER_BIT);
 glfwSwapBuffers(window);
 ```
   
+- Learned about the Graphics Pipeline.
+- The input for the Graphics Pipeline is an array of Vertex Data[]. These vertices are NOT mathematical vertices becasue they contain data for position and other things like color.
+- Learned the overall flow of the Graphics Pipeline:
+1. VERTEX SHADER: Gets the vertex position data)
+2. SHAPE ASSEMBLY: Creates a primitive line, or shape based on the vertext data.
+3. GEOMETRY SHADER: Adds vertices and creates new primatives out of already existing primatives.
+4. RASTERIZATION: Perfect mathematical shapes become pixels.
+5. FRAGMENT SHADER: Adds colors to the pixels (very important shader; includes lighting, shadows, etc).
+6. TESTS AND BLENDING: Figures out which pixel to actually show since pixels may be overlapping.
+- Learned that OpenGL doesn't provide defaults for vertex and fragment shaders.
