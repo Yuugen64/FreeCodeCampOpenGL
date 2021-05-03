@@ -85,8 +85,61 @@ glfwSwapBuffers(window);
 - Learned that vertices range from -1 to 1 for the X-axis and Y-axis.
 - ALL OPENGL Objects are utilized via REFERENCES.
 - Used boilerplate vertex and fragment shader code just to make things a little easier at this point.
+```
+//Vertex Shader
+const char* vertexShaderSource = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
+
+//Fragment Shader
+const char* fragmentShaderSource = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
+"}\n\0";
+```
+- Learned how to create an array of vertices:
+```
+//Coordinates for a vertex shader
+//We use openGL-float datatype because normal floats may differ in size causing errors.
+GLfloat vertices[] =
+{
+	-0.5f, -0.5f * float(sqrt(3)) / 3.0f,
+	-0.5f, -0.5f * float(sqrt(3)) / 3.0f,
+	0.0f, 0.5 * float(sqrt(3)) * 2 / 3, 0.0f
+};
+```
 - Learned that we have to create our own shaders via openGL shader reference.
-- Learned that openGL has its own set of datatypes, and utilized its version of unsigned ints for shader references.
+```
+//Attempting to create our vertex shader by referencing an openGL vertex shader
+//GLuint -> openGL unsigned integer, i.e. a positive integer using all 8 bits for values.
+//glCreateShader() is the call, GL_VERTEX_SHADER is the type of shader.
+GLuint myVertexShader = glCreateShader(GL_VERTEX_SHADER);
+glShaderSource(myVertexShader, 1, &vertexShaderSource, NULL);
+
+//Repeat for fragment shader
+GLuint myFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+glShaderSource(myFragmentShader, 1, &fragmentShaderSource, NULL);
+```
+- Learned that openGL has its own set of datatypes, and utilized its version of unsigned ints for shader references. (GLuint)
 - Learned that our graphics card cannot simply use our shader code; it has to be compiled immediately into Machine Code.
+```
+//The graphics card can't understand our shader code however, so it must be compiled into MACHINE CODE right now.
+glCompileShader(myVertexShader);
+glCompileShader(myFragmentShader);
+```
 - Learned that even though our shaders are compiled into Machine code, we still need to wrap them into a shader program so they can actually be used.
+```
+glAttachShader(shaderProgram, myVertexShader);
+glAttachShader(shaderProgram, myFragmentShader);
+glLinkProgram(shaderProgram);
+```
 - Learned that you can delete the previously created shaders after compiling them and adding them to a shaderProgram, since they are aready in the shaderProgram.
+```
+glDeleteShader(myVertexShader);
+glDeleteShader(myFragmentShader);
+```
