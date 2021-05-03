@@ -15,7 +15,7 @@
 ```
 glfwInit();
 ```
-  <br>
+
 - Told GLFW which version we would like to use via Hints.
 ```
 //glfw doesnt know which version of glfw we are using, so we need to tell it via hints.
