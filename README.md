@@ -46,3 +46,21 @@ glfwMakeContextCurrent(window);
 
 - Corrected previously mentioned hints mistake.
 - Got a GLFW Window working!
+- Started using GLAD, told it to load needed configs for OpenGL
+```
+gladLoadGL();
+```
+- Learned how to define what part of the viewport openGL should RENDER to.
+(Also learned that (0,0) is the BOTTOM RIGHT corner, and (800,800) is the TOP LEFT corner of the window
+```
+glViewport(0, 0, 800, 800);
+```
+- Learned the concept of buffers, and that frames are loaded in the background and then swapped out with the displayed frame. (Buffers are places in memory for pixels). 
+- Learned that the FRONT BUFFER is the buffer being displayed on the screen.
+- Learned that the BACK BUFFER is the buffer where the information is currently being written.
+- Got a color to appear in the window!
+```
+glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+glClear(GL_COLOR_BUFFER_BIT);
+glfwSwapBuffers(window);
+```
