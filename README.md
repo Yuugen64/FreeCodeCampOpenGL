@@ -6,7 +6,6 @@
 - Downloaded GLFW to help with creating openGL windows (I believe its also cross platform).
 - Followed along to set up the project in VS 2019 (The most difficult thing of all honestly).
 - Downloaded GLAD 'core' version 3.3, and added the 'glad.c' file to the main project (as a source file).
-- Got a GLFW Window working!
 - Added the 'glad' folder to my 'include' project folder.
 - Also added the GLFW and KHR folders to my 'include' folder.
 - Added the glfw3.lib to my 'lib' folder.
@@ -44,3 +43,6 @@ if (window == NULL)
 ```
 glfwMakeContextCurrent(window);
 ```
+
+- Corrected previously mentioned hints mistake.
+- Got a GLFW Window working!
