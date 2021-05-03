@@ -82,3 +82,11 @@ glfwSwapBuffers(window);
 5. FRAGMENT SHADER: Adds colors to the pixels (very important shader; includes lighting, shadows, etc).
 6. TESTS AND BLENDING: Figures out which pixel to actually show since pixels may be overlapping.
 - Learned that OpenGL doesn't provide defaults for vertex and fragment shaders.
+- Learned that vertices range from -1 to 1 for the X-axis and Y-axis.
+- ALL OPENGL Objects are utilized via REFERENCES.
+- Used boilerplate vertex and fragment shader code just to make things a little easier at this point.
+- Learned that we have to create our own shaders via openGL shader reference.
+- Learned that openGL has its own set of datatypes, and utilized its version of unsigned ints for shader references.
+- Learned that our graphics card cannot simply use our shader code; it has to be compiled immediately into Machine Code.
+- Learned that even though our shaders are compiled into Machine code, we still need to wrap them into a shader program so they can actually be used.
+- Learned that you can delete the previously created shaders after compiling them and adding them to a shaderProgram, since they are aready in the shaderProgram.
