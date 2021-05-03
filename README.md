@@ -143,3 +143,9 @@ glLinkProgram(shaderProgram);
 glDeleteShader(myVertexShader);
 glDeleteShader(myFragmentShader);
 ```
+- Learned that BINDING in openGL means that we make a certain object the CURRENT object, so if we were to fire a function that modifies that type of object, it modifies the current BINDED object.
+- Learned that moving data between the CPU and GPU is slow, so we utilize buffers again to make sure we pass a sufficient amount.
+- Learned that Vertex Buffer Objects contain our actual vertices to be passed to our shaders.
+- Learned that Vertex Array Objects tell out shaders HOW TO INTERPRET our Vertex Buffer Objects.
+- Learned that you better have your vertice math correct...
+- Got a triangle to display!!!
