@@ -165,3 +165,10 @@ glDeleteShader(myFragmentShader);
 - Created 'shaderClass.cpp' where we included our 'shaderClass.h' and implemented a small function to read text files in as a string.
 - Created a 'VBO.h' headerfile.
 - Created a 'VBO.cpp' where we included our 'VBO.h' and implemented the code for creating, binding, unbinding, and deleting our VBO.
+
+
+
+
+5.4.21
+- Successfully migrated core functionality to external classes and header files.
+- Verified that the tri-force still displays correctly.
