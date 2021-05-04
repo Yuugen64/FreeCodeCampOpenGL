@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+/*
 //Vertex Shader
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -17,6 +18,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "{\n"
 "   FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
 "}\n\0";
+*/
 
 int main()
 {
@@ -73,7 +75,7 @@ int main()
 	
 
 
-
+	/*
 	//Attempting to create our vertex shader by referencing an openGL vertex shader
 	//GLuint -> openGL unsigned integer, i.e. a positive integer using all 8 bits for values.
 	//glCreateShader() is the call, GL_VERTEX_SHADER is the type of shader.
@@ -98,7 +100,7 @@ int main()
 	//We can delete our previous shaders because they're already in our shaderProgram.
 	glDeleteShader(myVertexShader);
 	glDeleteShader(myFragmentShader);
-
+	*/
 
 
 	//Coordinates for a vertex shader
