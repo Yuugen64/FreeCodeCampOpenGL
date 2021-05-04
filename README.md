@@ -159,3 +159,9 @@ glDeleteShader(myFragmentShader);
 - Learned that index buffers are created and bound in a similar way to VAOs and VBOs.
 - Learned that index buffers are PART of a VAO, so they need to be bound AFTER the VAO otherwise openGL will assume that you don't want to use the index buffer.
 - Got a tri-force rendeirng!
+- Moved the Vertex Shader to its own text file 'default.vert'.
+- Moved the Fragment Shader to its own text file 'default.frag'.
+- Defined my FIRST class 'shaderClass.h':
+- Created 'shaderClass.cpp' where we included our 'shaderClass.h' and implemented a small function to read text files in as a string.
+- Created a 'VBO.h' headerfile.
+- Created a 'VBO.cpp' where we included our 'VBO.h' and implemented the code for creating, binding, unbinding, and deleting our VBO.
