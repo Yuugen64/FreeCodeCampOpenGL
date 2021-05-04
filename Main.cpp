@@ -105,20 +105,30 @@ int main()
 	//We use openGL-float datatype because normal floats may differ in size causing errors.
 	GLfloat vertices[] =
 	{
-		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f
+		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, //Lower left corner
+		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, //Lower right corner
+		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, //Upper Corner
+
+		-0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, //Inner Left
+		0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, //Inner right
+		0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f //Inner bottom
 	};
 	
-
+	//This is our index buffer, so we can simply reuse indices
+	GLuint indices[] =
+	{
+		0, 3, 5, //Lower left triangle
+		3, 2, 4, //Lower right triangle
+		5, 4, 1 //Upper triangle
+	};
 
 
 
 	//Vertex buffer objects are large sets of data passed between the CPU and GPU (since that communication is quite expensive and slow).
 	//Vertex array objects tell openGL how to use vertex buffer objects.
 
-	//Initialize a vertex array object, and a vertex buffer object.
-	GLuint VAO, VBO;
+	//Initialize a vertex array object, a vertex buffer object, and an index buffer object.
+	GLuint VAO, VBO, EBO;
 
 	//We only have one of each currently currently:
 
@@ -127,6 +137,9 @@ int main()
 
 	//Generate the Vertex Buffer Object
 	glGenBuffers(1, &VBO);
+
+	//Generate Index Buffer
+	glGenBuffers(1, &EBO);
 
 	//Make the VAO the current Vertex Array Object by binding it.
 	glBindVertexArray(VAO);
@@ -138,6 +151,10 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	//^All of this results in a nicely packed object with our vertex data.
 
+	//Make the index buffer current via binding
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	//Tells openGL how to interpret our vertices (how many, what type, how big are they, and some other things).
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -145,6 +162,9 @@ int main()
 	//Bind our vertex array to 0 so it can't be modified by a function call.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	//*****The Index buffer is contained WITHIN the VAO, so you have to bind it AFTER the VAO otherwise you are telling openGL that you don't want to use the EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
 	
@@ -159,18 +179,19 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES,9, GL_UNSIGNED_INT, 0);
 
 		//Make sure to swap buffers so the vertices are actually drawn to the frame.
 		glfwSwapBuffers(window);
 
-
+		//Take care of all GLFW events
 		glfwPollEvents();
 	}
 
 	//Terminate out VAO(s), VBO(s), and shaderProgram before the program ends.
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	//Terminate the glfw window before the program ends.
