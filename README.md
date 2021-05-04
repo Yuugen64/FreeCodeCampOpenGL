@@ -149,3 +149,13 @@ glDeleteShader(myFragmentShader);
 - Learned that Vertex Array Objects tell out shaders HOW TO INTERPRET our Vertex Buffer Objects.
 - Learned that you better have your vertice math correct...
 - Got a triangle to display!!!
+
+
+
+
+
+5.3.21
+- Learned about what an index buffer is (a way to re-use indices).
+- Learned that index buffers are created and bound in a similar way to VAOs and VBOs.
+- Learned that index buffers are PART of a VAO, so they need to be bound AFTER the VAO otherwise openGL will assume that you don't want to use the index buffer.
+- Got a tri-force rendeirng!
