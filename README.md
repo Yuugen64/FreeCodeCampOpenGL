@@ -172,3 +172,15 @@ glDeleteShader(myFragmentShader);
 5.4.21
 - Successfully migrated core functionality to external classes and header files.
 - Verified that the tri-force still displays correctly.
+- Learned that shaders are just functions that run on the CPU.
+- Learned that (for openGL) shaders use GLSL (openGL Shader Language) that has a similar syntax to C.
+- [42:30] A great visual for demonstrating how we are feeding data to the shader, and how we tell the shader to process the data with offsets and strides.
+- Learned that the Coordinates Stride is the distance in Bytes between to sets of vertex coordinates startpoints.
+- Learned that the Color Stride is the distance in Bytes between two sets of color data startpoints.
+- Learned that the Color Offset controls the separation of coordinate and color data within a set of Bytes.
+- Learned about "Uniforms" that are essentially universal variables, that can be accessed by multiple shaders and evenfrom within the main() function.
+- *Don't declare Uniforms UNLESS you KNOW you are going to use them since OpenGL will delete them automatically which may cause errors!*
+- Observed that you need to set up error catching for shaders since there doesn't seem to be any built into openGL. (The tutorial even differentiates with IF-ELSE between compilation errors and linker errors.
+- Got a rainbow square to appear!
+- Scale now works with a Uniform!
+- Understand the coordinates system a little better now (the square was more intuitive).
