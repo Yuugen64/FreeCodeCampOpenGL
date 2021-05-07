@@ -191,3 +191,4 @@ glDeleteShader(myFragmentShader);
 - Learned about some other settings regarding textures. GL_REPEAT simply repeats the texture. GL_MIRRORED_REPEAT mirrors the texture everytime it is repeated. GL_CLAMP_TO_EDGE simply stretches the image to the edges. GL_CLAMP_TO_BORDER inserts a border of your choice color around the edges of the image. ***You can mix and match them since they only apply on ONE axis at a time (s,d,r [x,y,x] respectively).***
 - PAY ATTENTION TO COLOR CHANNELS! GL_RGB is for .jpegs, GL_RGBA is for .png.
 - Textures are applied via coordinates from 0 to 1 on both axis, with (0,0) being the bottom left corner and (1,1) being the top right corner. Coordinates higher than 1 cause the texture to repeat.
+- Learned that openGL reads images from left to right, bottom to top. While the stbi library passes images left to right from top to bottom. Utilized a standard stbi function to flip vertically on load.
