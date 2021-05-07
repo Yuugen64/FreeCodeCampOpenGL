@@ -184,3 +184,10 @@ glDeleteShader(myFragmentShader);
 - Got a rainbow square to appear!
 - Scale now works with a Uniform!
 - Understand the coordinates system a little better now (the square was more intuitive).
+
+5.6.21
+- Learned about texture "units", essentially they are slots reserved for individual textures that come together as a bundle. (at least in openGL's implementation).
+- Two modes for scaling texture resolution up or down; GL_NEAREST and GL_LINEAR. Using GL_NEAREST keeps things pixelated and is preffered when working with pixel art. Using GL_LINEAR generates NEW pixels based on the pixels nearby which softens the texture and generally results in a blurrier image. 
+- Learned about some other settings regarding textures. GL_REPEAT simply repeats the texture. GL_MIRRORED_REPEAT mirrors the texture everytime it is repeated. GL_CLAMP_TO_EDGE simply stretches the image to the edges. GL_CLAMP_TO_BORDER inserts a border of your choice color around the edges of the image. ***You can mix and match them since they only apply on ONE axis at a time (s,d,r [x,y,x] respectively).***
+- PAY ATTENTION TO COLOR CHANNELS! GL_RGB is for .jpegs, GL_RGBA is for .png.
+- Textures are applied via coordinates from 0 to 1 on both axis, with (0,0) being the bottom left corner and (1,1) being the top right corner. Coordinates higher than 1 cause the texture to repeat.
