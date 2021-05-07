@@ -175,6 +175,9 @@
   <ItemGroup>
     <Text Include="Libraries\include\stb\stb_image.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\ababl\Downloads\circuit.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

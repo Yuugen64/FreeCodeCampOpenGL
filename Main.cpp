@@ -11,11 +11,11 @@
 
 // Vertices coordinates
 GLfloat vertices[] =
-{ //               COORDINATES                  /     COLORS  (RGB)         //
-	-0.5f, -0.5f, 0.0f,								1.0f, 0.0f, 0.0f,	//Lower left corner RED
-	-0.5f, 0.5f, 0.0f,								0.0f, 1.0f, 0.0f,	//Upper left corner GREEN
-	0.5f, 0.5f, 0.0f,								0.0f, 0.0f, 1.0f,	//Upper right corner BLUE
-	0.5f, -0.5f, 0.0f,								1.0f, 1.0f, 1.0f	//Lower right corner WHITE
+{ //               COORDINATES                  /     COLORS  (RGB)         //       TEXTURE
+	-0.5f, -0.5f, 0.0f,								1.0f, 0.0f, 0.0f,			0.0f, 0.0f,//Lower left corner RED
+	-0.5f, 0.5f, 0.0f,								0.0f, 1.0f, 0.0f,			0.0f, 1.0f,//Upper left corner GREEN
+	0.5f, 0.5f, 0.0f,								0.0f, 0.0f, 1.0f,			1.0f, 1.0f,//Upper right corner BLUE
+	0.5f, -0.5f, 0.0f,								1.0f, 1.0f, 1.0f,			1.0f, 0.0f//Lower right corner WHITE
 };
 
 // Indices for vertices order
@@ -85,8 +85,9 @@ int main()
 	EBO EBO1(indices, sizeof(indices));
 
 	// Links VBO to VAO
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	// Unbind all to prevent accidentally modifying them
 	VAO1.Unbind();
 	VBO1.Unbind();
@@ -94,6 +95,43 @@ int main()
 	
 
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
+
+	//Texture
+	int widthImg, heightImg, numColCh;
+
+	//Load the img into stb
+	unsigned char* bytes = stbi_load("circuit.png", &widthImg, &heightImg, &numColCh, 0);
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+	//Activates the texture in unit0, the first texture unit.
+	glActiveTexture(GL_TEXTURE0);
+	//Bind the texture
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	//Sets our texture properties (for both scaling up AND down).
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// float flatColor[] = {1.0f, 1.0f, 0.5f, 1.0f};
+	// glTexParameterfv(GL_TEXTURE_2D. GL_TEXTURE_BORDER_COLOR, flatColor);
+
+	//create the texture from all of our properties and data components.
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
+	//delete the texture data to free up memory & unbind so we don't accidentily change it
+	stbi_image_free(bytes);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
+	shaderProgram.Activate();
+	glUniform1i(tex0Uni, 0);
 
 	//Main WHILE loop
 	while (!glfwWindowShouldClose(window))
@@ -103,7 +141,8 @@ int main()
 		shaderProgram.Activate();
 		//Where we control the 'scale' Uniform for our triangles.
 		//This HAS to be used AFTER our shader program is activated since the shaderProgram handles it.
-		glUniform1f(uniID, 0.0f);
+		glUniform1f(uniID, 0);
+		glBindTexture(GL_TEXTURE_2D, texture);
 
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
@@ -119,6 +158,7 @@ int main()
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();
+	glDeleteTextures(1, &texture);
 	shaderProgram.Delete();
 
 	//Terminate the glfw window before the program ends.
