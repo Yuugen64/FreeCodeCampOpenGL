@@ -192,3 +192,7 @@ glDeleteShader(myFragmentShader);
 - PAY ATTENTION TO COLOR CHANNELS! GL_RGB is for .jpegs, GL_RGBA is for .png.
 - Textures are applied via coordinates from 0 to 1 on both axis, with (0,0) being the bottom left corner and (1,1) being the top right corner. Coordinates higher than 1 cause the texture to repeat.
 - Learned that openGL reads images from left to right, bottom to top. While the stbi library passes images left to right from top to bottom. Utilized a standard stbi function to flip vertically on load.
+
+5.9.21
+- Cleaned up some of the code for FreeCodeCampOpenGL.
+- Learned that openGL is rather picky about the kinds of image data it reads in. Rather, one must be very careful to be sure that the photo extension is actually the correct extension. While it is posible to change it manually from .jpeg to .png and still have the image show up on your computer properly, openGL requires specific color channel data for specific photo formats (i.e. RGB for .jpeg, and RGBA for .png) and will cause significant errors if the wrong parameters are set for the wrong format type. Also, .png's that look nice on Google images will appear differently in openGL since the alpha channel (transparency) takes into account background color (of which Google Images is white and openGL's is not).
