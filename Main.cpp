@@ -99,6 +99,7 @@ int main()
 
 	//Texture
 	int widthImg, heightImg, numColCh;
+	//To compensate for the stbi library loading texture data in the opposite way that openGL reads it in.
 	stbi_set_flip_vertically_on_load(true);
 	//Load the img into stb
 	unsigned char* bytes = stbi_load("circuit.png", &widthImg, &heightImg, &numColCh, 0);
@@ -129,6 +130,7 @@ int main()
 	stbi_image_free(bytes);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	//Where we grab the texture and add it to the shaderProgram, referencing the texture unit.
 	GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
 	shaderProgram.Activate();
 	glUniform1i(tex0Uni, 0);
@@ -139,6 +141,7 @@ int main()
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		shaderProgram.Activate();
+
 		//Where we control the 'scale' Uniform for our triangles.
 		//This HAS to be used AFTER our shader program is activated since the shaderProgram handles it.
 		glUniform1f(uniID, 0);
