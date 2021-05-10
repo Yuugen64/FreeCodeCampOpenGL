@@ -200,3 +200,5 @@ glDeleteShader(myFragmentShader);
 5.10.21
 - Re-factored shader code to external 'Texture.h' and 'Texture.cpp' files just like previously with the VAO, VBO, EBO, and shaderClass.
 - Added a different texture for the square since the previous image had transparency which was causing it to appear poorly.
+- Learned that Matrices are used to expand openGL's restricted coordinate system [-1, 1] for the X Y Z axis, thus allowing us more "room" in 3D virtual 3D space.
+- Pausing here to watch 3Blue1Brown's Linear Algebra refresher playlist to better understand matrices.
