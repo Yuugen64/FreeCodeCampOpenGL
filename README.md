@@ -196,3 +196,7 @@ glDeleteShader(myFragmentShader);
 5.9.21
 - Cleaned up some of the code for FreeCodeCampOpenGL.
 - Learned that openGL is rather picky about the kinds of image data it reads in. Rather, one must be very careful to be sure that the photo extension is actually the correct extension. While it is posible to change it manually from .jpeg to .png and still have the image show up on your computer properly, openGL requires specific color channel data for specific photo formats (i.e. RGB for .jpeg, and RGBA for .png) and will cause significant errors if the wrong parameters are set for the wrong format type. Also, .png's that look nice on Google images will appear differently in openGL since the alpha channel (transparency) takes into account background color (of which Google Images is white and openGL's is not).
+
+5.10.21
+- Re-factored shader code to external 'Texture.h' and 'Texture.cpp' files just like previously with the VAO, VBO, EBO, and shaderClass.
+- Added a different texture for the square since the previous image had transparency which was causing it to appear poorly.
