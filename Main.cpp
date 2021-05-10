@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
 
+#include "Texture.h"
 #include "shaderClass.h"
 #include "VBO.h"
 #include "VAO.h"
@@ -98,42 +99,10 @@ int main()
 
 
 	//Texture
-	int widthImg, heightImg, numColCh;
-	//To compensate for the stbi library loading texture data in the opposite way that openGL reads it in.
-	stbi_set_flip_vertically_on_load(true);
-	//Load the img into stb
-	unsigned char* bytes = stbi_load("circuit.png", &widthImg, &heightImg, &numColCh, 0);
-
-	GLuint texture;
-	glGenTextures(1, &texture);
-	//Activates the texture in unit0, the first texture unit.
-	glActiveTexture(GL_TEXTURE0);
-	//Bind the texture
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	//Sets our texture properties (for both scaling up AND down).
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// float flatColor[] = {1.0f, 1.0f, 0.5f, 1.0f};
-	// glTexParameterfv(GL_TEXTURE_2D. GL_TEXTURE_BORDER_COLOR, flatColor);
-
-	//create the texture from all of our properties and data components.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	Texture vaporwave("vaporwave.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	vaporwave.texUnit(shaderProgram, "tex0", 0);
 
 
-	//delete the texture data to free up memory & unbind so we don't accidentily change it
-	stbi_image_free(bytes);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	//Where we grab the texture and add it to the shaderProgram, referencing the texture unit.
-	GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
-	shaderProgram.Activate();
-	glUniform1i(tex0Uni, 0);
 
 	//Main WHILE loop
 	while (!glfwWindowShouldClose(window))
@@ -145,7 +114,7 @@ int main()
 		//Where we control the 'scale' Uniform for our triangles.
 		//This HAS to be used AFTER our shader program is activated since the shaderProgram handles it.
 		glUniform1f(uniID, 0);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		vaporwave.Bind();
 
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
@@ -161,7 +130,7 @@ int main()
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();
-	glDeleteTextures(1, &texture);
+	vaporwave.Delete();
 	shaderProgram.Delete();
 
 	//Terminate the glfw window before the program ends.
